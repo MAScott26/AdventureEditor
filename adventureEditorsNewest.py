@@ -61,8 +61,8 @@ def playNode(game, currentNode):
     
 def getDefaultGame():
     defaultGame = {"start": ["Play again or quit", "Play again", "start", "Quit Game", "quit"],}
-    return defaultGame
     print("Default game loaded")
+    return defaultGame
     
 def editNode(game):
     nodes = game.keys()
@@ -78,6 +78,10 @@ def editNode(game):
     nodeA = editField(nodeA)
     menuB = editField(menuB)
     nodeB = editField(nodeB)
+    newNode = (desc, menuA, nodeA, menuB, nodeB)
+    game[editChoice] = newNode
+    return game
+
 def editField(node):
     edited = input(f"please insert new data for ({node})")
     return edited
