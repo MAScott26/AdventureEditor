@@ -1,34 +1,32 @@
-# -*- coding: utf-8 -*-
 """
 Michael Scott
 Adventure editor
-
-
-
 """
+
+import json
+
 def main():
+    
+    game = ""
     keepGoing = True
     while keepGoing:
         userChoice = getMenuChoice()
         if userChoice == "0":
             keepGoing = False
         elif userChoice == "1":
-            getDefaultGame()
+            game = getDefaultGame()
         elif userChoice == "2":
             loadGame()
         elif userChoice == "3":
-            saveGame()
+            saveGame(game)
         elif userChoice == "4":
-            editNode()
-            editField()
+            editNode(game)
         elif userChoice == "5":
-            playGame()
+            playGame(game)
         else:
             print("\n please select a valid number \n")
         
-#"start": ["Play again or quit", "Play again", "start", "Quit Game", "quit"],       
-    
-    
+#"start": ["Description", "MenuA", "NodeA", "MenuA", "NodeB"],       
     
 def getMenuChoice():
     print("""please choose a number
@@ -41,10 +39,9 @@ def getMenuChoice():
     menuChoice = input("what would you like to do? (0-5)\n")
     return menuChoice
 
-def playGame():
+def playGame(game):
     keepGoing = True
     currentNode = "start"
-    game = getDefaultGame()
     while keepGoing:
         if currentNode == "quit":
             keepGoing = False
@@ -52,25 +49,52 @@ def playGame():
             currentNode = playNode(game, currentNode)
     
 def playNode(game, currentNode):
-    print("playNode function")
+    print (game[currentNode][0])
+    choice = input (f"1) {game[currentNode][1]}\n2) {game[currentNode][3]}\n")
+    if choice == "1":
+        currentNode = game[currentNode][2]
+    elif choice == "2":
+        currentNode = game[currentNode][4]
+    else:
+        print ("Invalid choice. Please type 1 or 2.")
+    return currentNode
     
 def getDefaultGame():
-    game = {"start": ["Play again or quit", "Play again", "start", "Quit Game", "quit"],}
-    print ("Default game loaded")
-    return game
-
-def editNode():
-    print("edit node function")
+    defaultGame = {"start": ["Play again or quit", "Play again", "start", "Quit Game", "quit"],}
+    return defaultGame
+    print("Default game loaded")
     
-def editField():
-    print("edit field function")
+def editNode(game):
+    nodes = game.keys()
+    print(nodes)
+    editChoice = input("what node do you want to edit? if an existing node is not selected, a new one will be created.\n")
+    if editChoice in nodes:
+        newNode = game[editChoice]
+    else:
+        newNode = ["","","","",""]
+    (desc, menuA, nodeA, menuB, nodeB) = newNode
+    desc = editField(desc)
+    menuA = editField(menuA)
+    nodeA = editField(nodeA)
+    menuB = editField(menuB)
+    nodeB = editField(nodeB)
+def editField(node):
+    edited = input(f"please insert new data for ({node})")
+    return edited
+    print("one f string, one return statement")
     
-def saveGame():
-    print("save game function")
+def saveGame(dictionaryGame):
+    outFile = open("newAdventure.json", "w")
+    json.dump(dictionaryGame, outFile, indent=2)
+    print("saved game to newAdventure.json")
+    outFile.close()
     
 def loadGame():
-    print("load game function")
-    
+    inFile = open("newAdventure.json", "r")
+    loaded = json.load(inFile)
+    inFile.close
+    return loaded
+    print("loaded Game")
     
 main()
 
